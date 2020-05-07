@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if(!dataSnapshot.child("Users").child(phoneNumber).exists()){
                     HashMap<String,Object> userDataMap = new HashMap<>();
                     userDataMap.put("phoneNumber",phoneNumber);
-                    userDataMap.put("Name",name);
+                    userDataMap.put("name",name);
                     userDataMap.put("password",password);
                     reference.child("Users").child(phoneNumber).updateChildren(userDataMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
