@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         progressDialog = new ProgressDialog(this);
+        Paper.init(this);
 
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
@@ -111,18 +112,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(parentDbName).child(phoneNumber).exists()){
-                    User userData = dataSnapshot.child(parentDbName).child(phoneNumber).getValue(User.class);
+                    final User userData = dataSnapshot.child(parentDbName).child(phoneNumber).getValue(User.class);
 
                     if(userData.getPhoneNumber().equals(phoneNumber)){
                         if(userData.getPassword().equals(password)){
                             if (parentDbName.equals("Users")) {
+                                Prevalent.currentOnlineUser = userData;
                                 Toast.makeText(LoginActivity.this, "Successful Login", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             }else if(parentDbName.equals("Admins")){
                                 Toast.makeText(LoginActivity.this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-                                startActivity(new Intent(LoginActivity.this, AdminAddNewProductActivity.class));
+                                startActivity(new Intent(LoginActivity.this, AdminCategoryActivity.class));
                             }
 
                         }else{
